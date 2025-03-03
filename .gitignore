@@ -1,0 +1,7 @@
+mofa/
+moly/
+
+venv/
+.apikey
+.env.secret
+.cfgr

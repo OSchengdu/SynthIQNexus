@@ -1,9 +1,8 @@
-import mofa
+import json
 import os 
 import openai
 import sqlite3
-from typing import Optional
-
+from typing import Optional, List, Tuple
  
 apikey=""
 
@@ -14,7 +13,14 @@ class NLP:
         self.role_prompt = self.role()
 
     def _load_apikey():
-        pass
+        try:
+            with open(."apikey". "r") as f :
+                config = json.load(f)
+                self.apikey = config.get("")
+                if not self.apikey:
+                    raise ValueError("没找到apikey")
+                
+                openai.api_key
     
     def _get_db_schema():
         pass
