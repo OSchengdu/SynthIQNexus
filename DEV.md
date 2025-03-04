@@ -1,4 +1,5 @@
-## 3.1
+# 3.1
+
 ### 现状
 
 1. 目前项目难度适中，适合小团队快速迭代Demo，但需投入额外资源实现AI能力。
@@ -28,28 +29,58 @@
     4. 对于ai，应该具备和增强该产品的语义理解功能。
     5. 应当支持多源异构数据，为便于不断获取数据，还应该接入网页、PDF、API等非数据库数据，RSS订阅获取动态内容，爬虫数据。
   
-  # 3.3 + 3.2 
   
   
+# 3.3 + 3.2 
+
   
-  ### 进展
+
+### 进展
+
+1. 迁移仓库到OSchengdu下，将较难的分支dork上传到github，分支web、mofa、magua、moly在本地
   
-  1. 迁移仓库到OSchengdu下，将较难的分支dork上传到github，分支web、mofa、magua、moly在本地
+2. 完成了环境搭建文档（arch+fedora），包含rust-dora-rs,python-dora-rs,python-dora-cli, dora-cli和部分moly文档，web/方面包括fastAPI、node.js、next.js等，db方面包含python-sqlite3
   
-  2. 完成了环境搭建文档（arch+fedora），包含rust-dora-rs,python-dora-rs,python-dora-cli, dora-cli和部分moly文档，web/方面包括fastAPI、node.js、next.js等，db方面包含python-sqlite3
+3. 完成DataUpdate部分功能，实时更新功能可以在数据库上使用
   
-  3. 完成DataUpdate部分功能，实时更新功能可以在数据库上使用
+4. 完成部分自然语言处理智能体的逻辑以及prompt
   
-  4. 完成部分自然语言处理智能体的逻辑以及prompt
+5. 制定no_frame feature的函数调用结构，整理出部分可复用模块并保存在本地
   
-  5. 制定no_frame feature的函数调用结构，整理出部分可复用模块并保存在本地
+6. 已能用脚本实现已有csv文件的数据导入
   
      
 
-###     规划
+###  规划
 
- 	1. 考虑增加围绕https://thehiddenwiki.org和https://thehiddenwiki.org/使用深网查询和获取的智能体。
- 	2. 尝试完成NLP到mofa&dora架构下的技术迁移。
- 	3. 完成dork模块和genSQL模块。
- 	4. 尝试增加一个使用ARP扫描（scapy）搜索周围设备的模块
- 	5. 推进前10天目标
+1. 考虑增加围绕https://thehiddenwiki.org 和https://thehiddenwiki.org/ 使用深网查询和获取的智能体。
+2. 尝试完成NLP到mofa&dora架构下的技术迁移。
+3. 完成dork模块和genSQL模块。
+4. 尝试增加一个使用ARP扫描（scapy）搜索周围设备的模块
+5. 推进前10天目标
+6. 考虑融合elsticsearch以获得更好的表现
+
+
+
+
+
+# 3.4
+
+### 进展
+1. 在使用elasticsearch时受到设备性能限制，可能会导致失败
+
+2. 尝试引入moxin和moly
+
+3. 分析并用脚本取代了数据源选择智能体，并把任务分担给前后两级智能体，已完成测试和开发，还有五个智能体需要开发
+
+4. 未尝试迁移到mofa框架下
+
+5. 更新了x.update.py
+
+### 规划
+
+1. 完善动态排序和混合索引方法，这是项目的灵魂
+2. 完善实时更新脚本，保证每十分钟更新一次每个数据库
+3. 添加arp硬件搜索模块
+4. 完成cleansing模块，并初步完成generate
+5. 更新架构和架构图
