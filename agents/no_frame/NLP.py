@@ -17,7 +17,7 @@ class NLPAgent:
                 openai.api_key = config[""]
             
         except Exception as e:
-            raise EunTimeError(f"failed due to wrong key:{str(e)}")
+            raise RunTimeError(f"failed due to wrong key:{str(e)}")
 
     def _build_prompt(self) -> str:
         # 提示词构建
@@ -97,50 +97,50 @@ class NLPAgent:
             print(f"分析失败：{str(e)}")
             return None
 
-#  
-# def main():
-#     # 示例数据库schema描述
-#     db_schemas = [
-#         "空气质量表：城市(city), PM2.5值(pm25), 监测日期(date)",
-#         "电车数据表：地区(region), 车辆数(count), 充电桩(chargers)"
-#     ]
-#     
-#     # 初始化NLP实例
-#     try:
-#         nlp_processor = NLP(db_schemas)
-#     except Exception as e:
-#         print(f"初始化失败：{str(e)}")
-#         return
-# 
-#     # 测试用例集
-#     test_queries = [
-#         "北京市朝阳区最近三天的PM2.5数值",  # 应触发db
-#         "使用scapy扫描192.168.1.0/24网段的开放端口",  # 应触发arp
-#         "2024年全球电动汽车市场趋势分析",  # 应触发dork
-#         "上海市空气质量数据与东京都的对比报告，并检查本地网络设备",  # 应触发db+arp
-#         "последние данные о качестве воздуха в Москве",  # 俄语触发db
-#         "How to build a quantum computer and find nearby IoT devices"  # 应触发dork+arp
-#     ]
-# 
-#     # 执行测试
-#     print("="*40)
-#     print("NLP模块测试报告")
-#     print("="*40)
-#     
-#     for idx, query in enumerate(test_queries, 1):
-#         print(f"\n测试用例 #{idx}")
-#         print(f"输入：{query}")
-#         
-#         result = nlp_processor.analyze(query)
-#         
-#         if result:
-#             triggers, keywords, raw = result
-#             print(f"[输出]")
-#             print(f"触发器：{', '.join(triggers)}")
-#             print(f"关键词：{keywords}")
-#             print(f"原始查询：{raw}")
-#         else:
-#             print("!! 分析失败")
-# 
-# if __name__ == "__main__":
-#     main()
+ 
+def main():
+    # 示例数据库schema描述
+    db_schemas = [
+        "空气质量表：城市(city), PM2.5值(pm25), 监测日期(date)",
+        "电车数据表：地区(region), 车辆数(count), 充电桩(chargers)"
+    ]
+    
+    # 初始化NLP实例
+    try:
+        nlp_processor = NLPAgent(db_schemas)
+    except Exception as e:
+        print(f"初始化失败：{str(e)}")
+        return
+
+    # 测试用例集
+    test_queries = [
+        "北京市朝阳区最近三天的PM2.5数值",  # 应触发db
+        "使用scapy扫描192.168.1.0/24网段的开放端口",  # 应触发arp
+        "2024年全球电动汽车市场趋势分析",  # 应触发dork
+        "上海市空气质量数据与东京都的对比报告，并检查本地网络设备",  # 应触发db+arp
+        "последние данные о качестве воздуха в Москве",  # 俄语触发db
+        "How to build a quantum computer and find nearby IoT devices"  # 应触发dork+arp
+    ]
+
+    # 执行测试
+    print("="*40)
+    print("NLP模块测试报告")
+    print("="*40)
+    
+    for idx, query in enumerate(test_queries, 1):
+        print(f"\n测试用例 #{idx}")
+        print(f"输入：{query}")
+        
+        result = nlp_processor.analyze(query)
+        
+        if result:
+            triggers, keywords, raw = result
+            print(f"[输出]")
+            print(f"触发器：{', '.join(triggers)}")
+            print(f"关键词：{keywords}")
+            print(f"原始查询：{raw}")
+        else:
+            print("!! 分析失败")
+
+if __name__ == "__main__":
+    main()

@@ -1,7 +1,10 @@
 mofa/
 moly/
-
+Moxin-LLM/
+elasticsearch-8.7.1/
 venv/
 .apikey
 .env.secret
 .cfgr
+DEV.md
+.x
