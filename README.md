@@ -102,9 +102,9 @@ pip install dora-cli
 
 ## 搜索页
 
-![图片1](../Screenshot From 2025-03-07 12-04-08.png)
+![1](../asset/Screenshot From 2025-03-07 12-04-08.png)
 
 ## 结果页
 
-![图片2](../Screenshot From 2025-03-07 12-48-05.png)
-![图片3](../Screenshot From 2025-03-07 12-48-01.png)
+![1](../asset/Screenshot From 2025-03-07 12-48-05.png)
+![2](../asset/Screenshot From 2025-03-07 12-48-01.png)
