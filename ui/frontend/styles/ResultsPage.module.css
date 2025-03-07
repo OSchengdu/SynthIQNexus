@@ -1,0 +1,116 @@
+.resultsContainer {
+  display: flex;
+  min-height: 100vh;
+  background: #22212e;
+  color: #ffffff;
+  font-family: 'Rubik Mono One', sans-serif;
+}
+
+.sidebar {
+  width: 200px;
+  background: rgba(41,42,45,0.9);
+  padding: 20px;
+}
+
+.sidebarButton {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  background: rgba(41,42,45,0.9);
+  border: 1px solid #00FF00;
+  color: #00FF00;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sidebarButton:hover {
+  background: rgba(0,255,0,0.1);
+  box-shadow: 0 0 10px rgba(0,255,0,0.3);
+}
+
+.sidebarButton.active {
+  background: rgba(0,255,0,0.2);
+  box-shadow: 0 0 15px rgba(0,255,0,0.5);
+}
+
+.mainContent {
+  flex: 1;
+  padding: 20px;
+}
+
+.contentContainer {
+  display: flex;
+  height: calc(100vh - 40px);
+  gap: 10px;
+}
+
+.section {
+  background: rgba(41,42,45,0.9);
+  border: 1px solid rgba(0,255,0,0.3);
+  border-radius: 8px;
+  padding: 15px;
+  transition: all 0.3s ease;
+}
+
+.scrollContent {
+  height: calc(100% - 40px);
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.audioSection,
+.chartSection,
+.mediaSection {
+  flex: 1;
+}
+
+.markdownSection {
+  flex: 3;
+}
+
+.collapsed {
+  flex: 0;
+  width: 0;
+  padding: 0;
+  border: none;
+  overflow: hidden;
+}
+
+.fullWidth {
+  flex: 1 0 100%;
+}
+
+.threeQuarter {
+  flex: 3;
+}
+
+.halfWidth {
+  flex: 2;
+}
+
+.quarterWidth {
+  flex: 1;
+}
+
+/* Markdown 样式 */
+.markdownSection h1,
+.markdownSection h2,
+.markdownSection h3 {
+  color: #00FF00;
+  margin: 1em 0;
+}
+
+.markdownSection ul {
+  padding-left: 20px;
+}
+
+.markdownSection a {
+  color: #00FF00;
+  text-decoration: none;
+}
+
+.markdownSection a:hover {
+  text-decoration: underline;
+}
