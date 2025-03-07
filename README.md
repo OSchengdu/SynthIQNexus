@@ -102,9 +102,9 @@ pip install dora-cli
 
 ## 搜索页
 
-![1](../asset/Screenshot From 2025-03-07 12-04-08.png)
+![1](asset/1.png)
 
 ## 结果页
 
-![1](../asset/Screenshot From 2025-03-07 12-48-05.png)
-![2](../asset/Screenshot From 2025-03-07 12-48-01.png)
+![1](asset/2.png)
+![2](asset/3.png)
