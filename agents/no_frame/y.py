@@ -1,8 +1,19 @@
 import requests
+import json
+import openai
+
+try:
+    # 为了与mofa框架下的.env.secret做区别
+    with open(".apikey", "r")  as f:
+        config = json.load(f)
+        openai.api_key = config["openai_key"]
+            
+except Exception as e:
+        raise RuntimeError(f"failed due to wrong key:{str(e)}")
 
 url = "https://api.siliconflow.cn/v1/chat/completions"
 headers = {
-    "Authorization": "Bearer sk-xubbnxwynyifmltibdrljlwoejjlxixhdwlwajmchzikgkga",
+    "Authorization": f"Bearer {openai.api_key}",
     "Content-Type": "application/json"
 }
 
