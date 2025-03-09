@@ -13,11 +13,11 @@ class NLPAgent:
         try:
             # 为了与mofa框架下的.env.secret做区别
             with open(".apikey", "r")  as f:
-                config = json.load("f")
-                openai.api_key = config[""]
+                config = json.load(f)
+                openai.api_key = config["openai_key"]
             
         except Exception as e:
-            raise RunTimeError(f"failed due to wrong key:{str(e)}")
+            raise RuntimeError(f"failed due to wrong key:{str(e)}")
 
     def _build_prompt(self) -> str:
         # 提示词构建
