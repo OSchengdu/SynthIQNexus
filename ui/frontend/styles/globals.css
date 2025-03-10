@@ -146,3 +146,14 @@ html, body {
   text-shadow: 0 0 8px rgba(0,255,0,0.3);
   transition: all 0.2s ease;
 }
+
+
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}

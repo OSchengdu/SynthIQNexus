@@ -1,7 +1,7 @@
 .resultsContainer {
   display: flex;
   min-height: 100vh;
-  background: #22212e;
+  background: #1e1a2e;
   color: #ffffff;
   font-family: 'Rubik Mono One', sans-serif;
 }
@@ -9,20 +9,57 @@
 .sidebar {
   width: 200px;
   background: rgba(41,42,45,0.9);
+  border-right: 1px solid rgba(0,255,0,0.3);
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+.sidebar.collapsed {
+  width: 50px;
+}
+
+.toggleButton {
+  position: absolute;
+  right: -15px;
+  top: 20px;
+  width: 30px;
+  height: 30px;
+  background: rgba(41,42,45,0.9);
+  border: 1px solid #00FF00;
+  border-radius: 50%;
+  color: #00FF00;
+  cursor: pointer;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.toggleButton:hover {
+  background: rgba(0,255,0,0.1);
+  box-shadow: 0 0 10px rgba(0,255,0,0.3);
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   padding: 20px;
+  padding-top: 60px;
 }
 
 .sidebarButton {
-  display: block;
-  width: 100%;
   padding: 12px;
-  margin-bottom: 10px;
   background: rgba(41,42,45,0.9);
   border: 1px solid #00FF00;
   color: #00FF00;
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .sidebarButton:hover {
@@ -32,6 +69,8 @@
 
 .sidebarButton.active {
   background: rgba(0,255,0,0.2);
+  border-color: #00FF00;
+  color: #00FF00;
   box-shadow: 0 0 15px rgba(0,255,0,0.5);
 }
 
@@ -40,77 +79,170 @@
   padding: 20px;
 }
 
-.contentContainer {
+.resultsHeader {
+  margin-bottom: 20px;
+  padding: 20px;
+  background: rgba(41,42,45,0.9);
+  border-radius: 8px;
+  border: 1px solid rgba(0,255,0,0.3);
+  box-shadow: 0 4px 12px rgba(0,255,0,0.1);
+}
+
+.headerTop {
   display: flex;
-  height: calc(100vh - 40px);
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.resultsHeader h1 {
+  color: #00FF00;
+  font-size: 2rem;
+  margin: 0;
+  text-shadow: 0 0 15px rgba(0,255,0,0.5);
+}
+
+.metaInfo {
+  display: flex;
+  gap: 20px;
+  color: rgba(192,192,192,0.7);
+  margin-bottom: 10px;
+}
+
+.metaInfo span {
+  padding: 5px 10px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 4px;
+}
+
+.searchForm {
+  display: flex;
   gap: 10px;
 }
 
-.section {
+.searchForm input {
+  flex: 1;
+  padding: 8px;
+  background: rgba(0,0,0,0.2);
+  border: 1px solid rgba(0,255,0,0.3);
+  border-radius: 4px;
+  color: #ffffff;
+}
+
+.searchForm button {
+  padding: 8px 16px;
+  background: rgba(0,255,0,0.1);
+  border: 1px solid #00FF00;
+  color: #00FF00;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.searchForm button:hover {
+  background: rgba(0,255,0,0.2);
+  box-shadow: 0 0 10px rgba(0,255,0,0.3);
+}
+
+.tabContent {
+  display: flex;
+  gap: 20px;
+  height: calc(100vh - 200px);
+}
+
+.resultsSection {
+  flex: 2;
   background: rgba(41,42,45,0.9);
   border: 1px solid rgba(0,255,0,0.3);
   border-radius: 8px;
   padding: 15px;
-  transition: all 0.3s ease;
-}
-
-.scrollContent {
-  height: calc(100% - 40px);
+  box-shadow: 0 4px 12px rgba(0,255,0,0.1);
   overflow-y: auto;
-  padding-right: 10px;
 }
 
-.audioSection,
-.chartSection,
-.mediaSection {
-  flex: 1;
-}
-
-.markdownSection {
-  flex: 3;
-}
-
-.collapsed {
-  flex: 0;
-  width: 0;
+.urlList {
+  list-style: none;
   padding: 0;
-  border: none;
-  overflow: hidden;
 }
 
-.fullWidth {
-  flex: 1 0 100%;
+.urlList li {
+  margin-bottom: 10px;
 }
 
-.threeQuarter {
-  flex: 3;
-}
-
-.halfWidth {
-  flex: 2;
-}
-
-.quarterWidth {
-  flex: 1;
-}
-
-/* Markdown 样式 */
-.markdownSection h1,
-.markdownSection h2,
-.markdownSection h3 {
-  color: #00FF00;
-  margin: 1em 0;
-}
-
-.markdownSection ul {
-  padding-left: 20px;
-}
-
-.markdownSection a {
+.urlList a {
   color: #00FF00;
   text-decoration: none;
 }
 
-.markdownSection a:hover {
+.urlList a:hover {
   text-decoration: underline;
 }
+
+.terminal {
+  background: #000;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.terminal pre {
+  margin: 0;
+  overflow-x: auto;
+}
+
+.terminalControls {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.dbResults {
+  display: flex;
+  gap: 20px;
+}
+
+.dbTable, .dbSummary {
+  flex: 1;
+}
+
+.integratedResults {
+  background: rgba(41,42,45,0.9);
+  border: 1px solid rgba(0,255,0,0.3);
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 4px 12px rgba(0,255,0,0.1);
+}
+
+.chartSection {
+  flex: 1;
+  background: rgba(41,42,45,0.9);
+  border: 1px solid rgba(0,255,0,0.3);
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 4px 12px rgba(0,255,0,0.1);
+  overflow-y: auto;
+  height: 300px;
+}
+
+.chartHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.regenerateButton {
+  padding: 8px 16px;
+  background: rgba(0,255,0,0.1);
+  border: 1px solid #00FF00;
+  color: #00FF00;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.regenerateButton:hover {
+  background: rgba(0,255,0,0.2);
+  box-shadow: 0 0 10px rgba(0,255,0,0.3);
+}
+
+
