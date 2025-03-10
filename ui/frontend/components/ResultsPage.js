@@ -1,22 +1,26 @@
-import React, { useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import styles from '../styles/ResultsPage.module.css';
+import React, { useState, useEffect } from 'react'
+import MarkdownRenderer from './MarkdownRenderer'
+import styles from '../styles/ResultsPage.module.css'
 
 const ResultsPage = () => {
-  const [sidebarVisible, setSidebarVisible] = useState(true);
-  const [activeTab, setActiveTab] = useState('dork');
-  const [chartData, setChartData] = useState(null);
-  const [regenerateCount, setRegenerateCount] = useState(0);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [sidebarVisible, setSidebarVisible] = useState(true)
+  const [activeTab, setActiveTab] = useState('dork')
+  const [markdownContent, setMarkdownContent] = useState('')
+  const [searchQuery, setSearchQuery] = useState('')
 
+  // 模拟数据
   const sampleData = {
-    dork: {
-      title: 'Dork 搜索结果',
-      urls: [
-        'https://example.com/dork1',
-        'https://example.com/dork2'
-      ]
-    },
+    dork: `
+# Dork 搜索结果
+
+## 相关链接
+- [示例链接1](https://example.com/dork1)
+- [示例链接2](https://example.com/dork2)
+
+## 统计信息
+- 总结果数：2
+- 相关度：0.85
+    `,
     arp: {
       title: 'ARP 扫描结果',
       devices: [
@@ -25,178 +29,120 @@ const ResultsPage = () => {
         '192.168.1.3 - Device C'
       ]
     },
-    db: {
-      title: '数据库查询结果',
-      table: `
+    db: `
+# 数据库查询结果
+
+## 数据表
 | 列1 | 列2 | 列3 |
 |-----|-----|-----|
 | 数据1 | 数据2 | 数据3 |
-      `,
-      summary: `
+
+## 统计摘要
 - 总计: 100
 - 平均值: 33.3
 - 最大值: 50
-      `
-    },
-    integrated: {
-      title: '整合结果',
-      content: `
+    `,
+    integrated: `
 # 整合结果
 
+## 综合信息
 - 综合了 Dork、ARP 和 DB 的结果
 - 提供统一的视图
-      `
-    },
-    web: {
-      title: '普通网页搜索结果',
-      urls: [
-        'https://example.com/web1',
-        'https://example.com/web2'
-      ]
-    }
-  };
+
+## 代码示例
+\`\`\`python
+def integrate_results():
+    print("整合完成")
+\`\`\`
+    `,
+    web: `
+# 普通网页搜索结果
+
+## 相关链接
+- [示例链接1](https://example.com/web1)
+- [示例链接2](https://example.com/web2)
+    `
+  }
+
+  // 动态生成Markdown内容
+  const generateMarkdown = (tab) => {
+    if (tab === 'arp') return '' // ARP保持原样
+    return sampleData[tab]
+  }
+
+  useEffect(() => {
+    setMarkdownContent(generateMarkdown(activeTab))
+  }, [activeTab])
 
   const handleRegenerate = () => {
-    setRegenerateCount(prev => prev + 1);
-    setChartData(`/images/chart-${regenerateCount % 3}.png`);
-  };
+    // 模拟重新生成Markdown
+    const newContent = `
+# 重新生成的内容
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    console.log('Search:', searchQuery);
-  };
+- 生成时间：${new Date().toLocaleTimeString()}
+- 随机值：${Math.random().toFixed(4)}
+
+\`\`\`javascript
+console.log("重新生成内容")
+\`\`\`
+    `
+    setMarkdownContent(newContent)
+  }
 
   const renderTabContent = () => {
-    const data = sampleData[activeTab];
-    
-    return (
-      <div className={styles.tabContent}>
-        <div className={styles.resultsSection}>
-          <h2>{data.title}</h2>
-          
-          {activeTab === 'dork' && (
-            <ul className={styles.urlList}>
-              {data.urls.map((url, index) => (
-                <li key={index}>
-                  <a href={url} target="_blank" rel="noopener noreferrer">
-                    {url}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          )}
-
-          {activeTab === 'arp' && (
-            <div className={styles.terminal}>
-              <pre>
-                {data.devices.join('\n')}
-              </pre>
-              <div className={styles.terminalControls}>
-                <button>⬆️</button>
-                <button>⬇️</button>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'db' && (
-            <div className={styles.dbResults}>
-              <div className={styles.dbTable}>
-                <ReactMarkdown>{data.table}</ReactMarkdown>
-              </div>
-              <div className={styles.dbSummary}>
-                <ReactMarkdown>{data.summary}</ReactMarkdown>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'integrated' && (
-            <div className={styles.integratedResults}>
-              <ReactMarkdown>{data.content}</ReactMarkdown>
-            </div>
-          )}
-
-          {activeTab === 'web' && (
-            <ul className={styles.urlList}>
-              {data.urls.map((url, index) => (
-                <li key={index}>
-                  <a href={url} target="_blank" rel="noopener noreferrer">
-                    {url}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        <div className={styles.chartSection}>
-          <div className={styles.chartHeader}>
-            <h3>生成图表</h3>
-            <button 
-              className={styles.regenerateButton}
-              onClick={handleRegenerate}
-            >
-              🔄 重新生成
-            </button>
+    if (activeTab === 'arp') {
+      return (
+        <div className={styles.terminal}>
+          <pre>
+            {sampleData.arp.devices.join('\n')}
+          </pre>
+          <div className={styles.terminalControls}>
+            <button>⬆️</button>
+            <button>⬇️</button>
           </div>
-          {chartData && (
-            <img src={chartData} alt="生成的图表" />
-          )}
         </div>
+      )
+    }
+
+    return (
+      <div className={styles.markdownSection}>
+        <MarkdownRenderer content={markdownContent} />
       </div>
-    );
-  };
+    )
+  }
 
   return (
     <div className={styles.resultsContainer}>
+      {/* 侧边栏 */}
       <div className={`${styles.sidebar} ${sidebarVisible ? '' : styles.collapsed}`}>
         <button className={styles.toggleButton} onClick={() => setSidebarVisible(!sidebarVisible)}>
           {sidebarVisible ? '◀' : '▶'}
         </button>
         <nav>
-          <button 
-            className={`${styles.sidebarButton} ${activeTab === 'dork' ? styles.active : ''}`}
-            onClick={() => setActiveTab('dork')}
-          >
-            Dork
-          </button>
-          <button 
-            className={`${styles.sidebarButton} ${activeTab === 'arp' ? styles.active : ''}`}
-            onClick={() => setActiveTab('arp')}
-          >
-            ARP
-          </button>
-          <button 
-            className={`${styles.sidebarButton} ${activeTab === 'db' ? styles.active : ''}`}
-            onClick={() => setActiveTab('db')}
-          >
-            DB
-          </button>
-          <button 
-            className={`${styles.sidebarButton} ${activeTab === 'integrated' ? styles.active : ''}`}
-            onClick={() => setActiveTab('integrated')}
-          >
-            整合结果
-          </button>
-          <button 
-            className={`${styles.sidebarButton} ${activeTab === 'web' ? styles.active : ''}`}
-            onClick={() => setActiveTab('web')}
-          >
-            网页结果
-          </button>
+          {['dork', 'arp', 'db', 'integrated', 'web'].map(tab => (
+            <button
+              key={tab}
+              className={`${styles.sidebarButton} ${activeTab === tab ? styles.active : ''}`}
+              onClick={() => setActiveTab(tab)}
+            >
+              {tab.toUpperCase()}
+            </button>
+          ))}
         </nav>
       </div>
 
+      {/* 主内容区 */}
       <main className={styles.mainContent}>
         <header className={styles.resultsHeader}>
           <div className={styles.headerTop}>
-            <h1>搜索结果标题</h1>
+            <h1>{activeTab.toUpperCase()} 结果</h1>
           </div>
           <div className={styles.metaInfo}>
             <span>相关度: 0.85</span>
             <span>更新时间: 刚刚</span>
             <span>来源: 综合数据库</span>
           </div>
-          <form className={styles.searchForm} onSubmit={handleSearch}>
+          <form className={styles.searchForm} onSubmit={(e) => e.preventDefault()}>
             <input
               type="text"
               placeholder="输入搜索内容..."
@@ -208,9 +154,23 @@ const ResultsPage = () => {
         </header>
 
         {renderTabContent()}
+
+        <div className={styles.chartSection}>
+          <div className={styles.chartHeader}>
+            <h3>生成图表</h3>
+            <button 
+              className={styles.regenerateButton}
+              onClick={handleRegenerate}
+            >
+              🔄 重新生成
+            </button>
+          </div>
+          {/* 图表占位符 */}
+          <div style={{ height: '200px', background: '#000' }} />
+        </div>
       </main>
     </div>
-  );
-};
+  )
+}
 
-export default ResultsPage;
+export default ResultsPage
