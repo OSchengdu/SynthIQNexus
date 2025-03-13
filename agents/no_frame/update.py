@@ -33,7 +33,7 @@ class DataUpdater:
         pass
 
 
-if __name__="__main__":
+if __name__=="__main__":
     # get config file
     with open(".cfgr", "w") as f:
         f.write(config)
