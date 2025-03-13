@@ -63,6 +63,7 @@ class DorkAgent:
     # update from sqlite3 per 5 min
     def sync_from_sqlte(self, sqlite_path: str):
         import sqlite3
+        import pandas as pd
         conn = sqlite3.connect(sqlite_path)
         df = pd.read_sql("select * from air_quality", conn)
         records = df.to_dict(orient="records")
@@ -70,5 +71,5 @@ class DorkAgent:
                 {"_index":self.index, "_source": record}
                 for record in records
             ]
-        helpers.bulk(self.es, actions)
+        Helpers.bulk(self.es, actions)
 
