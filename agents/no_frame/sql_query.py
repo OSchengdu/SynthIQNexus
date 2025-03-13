@@ -1,14 +1,25 @@
+
+from openai import OpenAI
 import json
 import sqlite3
+import pandas as pd
 from typing import List, Dict, Optional
 from NLP import NLPAgent  # 引入 NLP 模块
 from choose_data import SourceRouter  # 引入 choose_data 模块
-from openai import OpenAI
+
 class SQLExecutor:
-    def __init__(self, db_schemas: List[str], db_path: str = "data.db"):
-        self.db_schemas = db_schemas
-        self.db_path = db_path
+    def __init__(self, csv_path: str = "Air_Quality.csv"):
+        self.csv_path = csv_path
+        self.columns = self._load_csv_columns()  # 加载 CSV 文件的列名
         self.client = self._load_apikey()
+
+    def _load_csv_columns(self) -> List[str]:
+        """加载 CSV 文件的列名"""
+        try:
+            df = pd.read_csv(self.csv_path, nrows=1)  # 只读取第一行（列名）
+            return df.columns.tolist()
+        except Exception as e:
+            raise RuntimeError(f"Failed to load CSV columns: {str(e)}")
 
     def _load_apikey(self):
         """加载 API 密钥"""
@@ -32,7 +43,7 @@ class SQLExecutor:
         # 输入
         - 用户查询：{raw_query}
         - 关键词：{keywords}
-        - 数据库结构：{self.db_schemas}
+        - 数据库表结构：{self.columns}
 
         # 输出要求
         严格返回 JSON 对象，包含以下字段：
@@ -45,15 +56,15 @@ class SQLExecutor:
         # 规则
         1. SQL 语句必须符合 SQLite 语法。
         2. 仅生成 SELECT 查询语句。
-        3. 如果查询涉及多个表，请使用 JOIN。
-        4. 如果查询条件不明确，请使用通配符（如 %）或默认值。
+        3. 如果查询条件不明确，请使用通配符（如 %）或默认值。
+        4. 返回尽可能多的结果（最多 100 条）。
 
         # 示例
-        输入：查询北京市最近三天的 PM2.5 数据
+        输入：Query Ozone (O3) levels in Upper East Side-Gramercy
         输出：{{
-            "sql": "SELECT city, pm25, date FROM air_quality WHERE city = '北京' AND date >= date('now', '-3 days')",
+            "sql": "SELECT * FROM air_quality WHERE \"Geo Place Name\" = 'Upper East Side-Gramercy' AND \"Name\" = 'Ozone (O3)' LIMIT 100",
             "tables": ["air_quality"],
-            "fields": ["city", "pm25", "date"]
+            "fields": ["Geo Place Name", "Name"]
         }}
         """
 
@@ -65,7 +76,10 @@ class SQLExecutor:
     def _execute_sql(self, sql: str) -> List[Dict]:
         """执行 SQL 语句并返回结果"""
         try:
-            with sqlite3.connect(self.db_path) as conn:
+            # 将 CSV 文件加载到 SQLite 内存数据库
+            df = pd.read_csv(self.csv_path)
+            with sqlite3.connect(":memory:") as conn:
+                df.to_sql("air_quality", conn, index=False, if_exists="replace")
                 conn.row_factory = sqlite3.Row  # 返回字典格式的结果
                 cursor = conn.cursor()
                 cursor.execute(sql)
@@ -98,7 +112,7 @@ class SQLExecutor:
                 # 执行 SQL
                 results = self._execute_sql(sql)
                 return {
-                    "results": results,
+                    "results": results[:100],  # 最多返回 100 条
                     "tables": parsed.get("tables", []),
                     "fields": parsed.get("fields", [])
                 }
@@ -110,25 +124,21 @@ class SQLExecutor:
             print(f"SQL 生成或执行失败：{str(e)}")
             return None
 
-    def fallback_execute(self, keywords: List[str], tables: List[str]) -> List[Dict]:
+    def fallback_execute(self, keywords: List[str]) -> List[Dict]:
         """传统方法生成并执行 SQL 语句（备用方案）"""
-        # 简单实现：根据关键词和表名生成 SQL
-        conditions = " AND ".join([f"{field} LIKE '%{keyword}%'" for keyword in keywords for field in ["city", "region"]])
-        sql = f"SELECT * FROM {tables[0]} WHERE {conditions}"
+        # 简单实现：根据关键词和列名生成 SQL
+        conditions = " OR ".join([f"\"{column}\" LIKE '%{keyword}%'" for keyword in keywords for column in self.columns])
+        sql = f"SELECT * FROM air_quality WHERE {conditions} LIMIT 100"
         print(f"备用 SQL：{sql}")
         return self._execute_sql(sql)
 
 def main():
     # 初始化 NLPAgent 和 SourceRouter
-    db_schemas = [
-        "空气质量表：城市(city), PM2.5值(pm25), 监测日期(date)",
-        "电车数据表：地区(region), 车辆数(count), 充电桩(chargers)"
-    ]
-    nlp = NLPAgent(db_schemas)
+    nlp = NLPAgent([])  # 无需传入数据库结构
     router = SourceRouter()
 
     # 测试查询
-    query = "查询北京市最近三天的 PM2.5 数据"
+    query = "Query Ozone (O3) levels in Upper East Side-Gramercy"
     analysis = nlp.analyze(query)
 
     if analysis:
@@ -143,7 +153,7 @@ def main():
             print("DB 处理结果：", db_results)
 
             # 生成并执行 SQL
-            sql_executor = SQLExecutor(db_schemas)
+            sql_executor = SQLExecutor()
             sql_result = sql_executor.generate_and_execute(keywords, raw_query)
 
             if sql_result:
@@ -153,7 +163,7 @@ def main():
             else:
                 # 备用方案
                 print("使用传统方法生成并执行 SQL")
-                fallback_results = sql_executor.fallback_execute(keywords, db_results["db"]["data"])
+                fallback_results = sql_executor.fallback_execute(keywords)
                 print("备用查询结果：", fallback_results)
         else:
             print("无需生成 SQL")

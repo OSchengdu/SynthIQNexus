@@ -21,8 +21,8 @@ class NLPAgent:
                 return OpenAI(api_key=api_key, base_url="https://api.siliconflow.cn/v1")
         except Exception as e:
             raise RuntimeError(f"Failed due to wrong key: {str(e)}")
-        finally:
-            print("Parsed config:", config, value, key)
+#         finally:
+#             print("Parsed config:", config, value, key)
 
     def _build_prompt(self) -> str:
         return f"""
