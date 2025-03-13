@@ -1,4 +1,5 @@
 from dork import DorkAgent
+import pandas as pd
 
 class DataUpdater:
     def __init__(self):
