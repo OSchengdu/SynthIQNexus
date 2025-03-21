@@ -1,51 +1,40 @@
-import { useEffect, useState } from 'react';
-import TypingEffect from '../components/TypingEffect';
+import { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { Back, Power1, Power2, Power3 } from 'gsap';
 
-export default function Home() {
-  const [items, setItems] = useState([]);
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-
-  useEffect(() => {
-    fetch('http://localhost:8000/items/')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => setItems(data.items))
-      .catch(error => console.error('Error fetching data:', error));
-  }, []);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const response = await fetch('http://localhost:8000/items/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name, description }),
-    });
-    if (response.ok) {
-      const newItem = await response.json();
-      setItems([...items, newItem]);
-    }
-  };
+const TypingEffect = () => {
+  const textareaRef = useRef(null);
 
   return (
-    <div>
-      <TypingEffect />
-      <div>
-        <ul>
-          {items.map(item => (
-            <li key={item.id}>
-              <h2>{item.name}</h2>
-              <p>{item.description}</p>
-            </li>
-          ))}
-        </ul>
+    <div className="google-style-container">
+      <h1 className="nexus-title">SynthIQ NexuS</h1>
+
+      <div className="input-container">
+        <textarea
+          ref={textareaRef}
+          className="search-textarea"
+          placeholder=""
+        />
+        <div className="button-container">
+          <button className="search-button">📊Diagram</button>
+          <button className="search-button">🎞️Media</button>
+          <button className="search-button">🧪Audio</button>
+        </div>
+      </div>
+      <div className="stealth-description">
+        <div className="description-trigger">🔍 功能说明</div>
+        <div className="description-content">
+          <h3>基于数据库的ai搜索引擎</h3>
+          <p>支持搜索功能，包括：</p>
+          <p>· 基于地理坐标的<span className="highlight">实时地图检索</span></p>
+          <p>· 结合气象数据的<span className="highlight">智能天气预测</span></p>
+          <p>· 动态生成的<span className="highlight">可视化数据图表</span></p>
+          <p>· 多媒体资源的<span className="highlight">智能关联推荐</span></p>
+          <p>· 开放式的<span className="highlight">数据接口服务</span></p>
+        </div>
       </div>
     </div>
   );
-}
+};
+
+export default TypingEffect;

@@ -15,11 +15,17 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "gsap": "^3.12.7",
-    "next": "^15.2.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "highlight.js": "^11.11.1",
+    "katex": "^0.16.21",
+    "next": "^15.2.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-markdown": "^10.1.0",
+    "react-syntax-highlighter": "^15.6.1",
     "recharts": "^2.15.1",
+    "rehype-highlight": "^7.0.2",
+    "rehype-katex": "^7.0.1",
+    "remark-gfm": "^4.0.1",
     "zustand": "^5.0.3"
   }
 }

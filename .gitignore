@@ -8,3 +8,4 @@ venv/
 .cfgr
 DEV.md
 .x
+.next/
